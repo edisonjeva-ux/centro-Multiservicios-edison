@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Centro de Servicios Múltiples Edison</title>
+
+  <!-- Metadatos para pantalla de inicio (PWA / Web App) -->
+  <meta name="theme-color" content="#174d39">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CSM Edison">
+
+  <style>
+    :root {
+      --primary: #174d39;
+      --primary-dark: #103b2b;
+      --gold: #d9a441;
+      --gold-hover: #c49132;
+      --bg: #fbfbfa;
+      --card-bg: #ffffff;
+      --border: #e6e6df;
+      --text-main: #1f2937;
+      --text-muted: #535d68;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.4;
+      min-height: 100dvh;
+    }
+
+    /* =========================================
+       1. PANTALLA INICIAL: TARJETA DIGITAL
+       ========================================= */
+    #view-card {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .digital-card {
+      width: 100%;
+      max-width: 410px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(16, 59, 43, 0.12), 0 2px 6px rgba(0,0,0,0.04);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      padding: 16px 14px 13px;
+      text-align: center;
+    }
+
+    .card-header h1 {
+      font-size: 19px;
+      font-weight: 750;
+      letter-spacing: -0.2px;
+      line-height: 1.22;
+    }
+
+    .card-header .tagline {
+      font-size: 12.5px;
+      color: #e4eee9;
+      margin-top: 5px;
+      line-height: 1.35;
+    }
+
+    .hours-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(217, 164, 65, 0.16);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 11px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .hours-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .card-content {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .address-row {
+      background: #f7f7f4;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 8px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .address-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .address-info svg {
+      flex-shrink: 0;
+      color: var(--primary);
+    }
+
+    .btn-maps {
+      flex-shrink: 0;
+      min-height: 36px;
+      padding: 0 10px;
+      background: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+    }
+
+    .btn-maps:active {
+      background: #edf5f1;
+    }
+
+    .services-summary {
+      background: #fcfcfb;
+      border: 1px dashed #dcdcd5;
+      border-radius: 11px;
+      padding: 8px 9px;
+    }
+
+    .services-summary-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .chip-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4.5px;
+    }
+
+    .chip {
+      background: #ffffff;
+      border: 1px solid #e1e1da;
+      border-radius: 6px;
+      padding: 3px 6.5px;
+      font-size: 11px;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .chip strong {
+      color: var(--primary);
+      font-weight: 750;
+    }
+
+    /* Botones de acción (mínimo 52px de alto) */
+    .btn-action {
+      min-height: 52px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 750;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.08s, background 0.15s;
+    }
+
+    .btn-action:active {
+      transform: scale(0.985);
+    }
+
+    .btn-main-gold {
+      background: var(--gold);
+      color: #171717;
+      box-shadow: 0 4px 12px rgba(217, 164, 65, 0.35);
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .btn-main-gold:active {
+      background: var(--gold-hover);
+    }
+
+    .grid-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+      font-size: 13px;
+      padding: 0 6px;
+      width: 100%;
+    }
+
+    .btn-outline:active {
+      background: #edf5f1;
+    }
+
+    .card-footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      padding: 1px 4px 0;
+    }
+
+    /* =========================================
+       2. PANTALLA SECUNDARIA: COTIZADOR
+       ========================================= */
+    #view-cotizador {
+      display: none;
+      padding-bottom: 120px;
+    }
+
+    .cotizador-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 16px 16px 18px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(16, 59, 43, 0.15);
+    }
+
+    .btn-back {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 6px 12px;
+      min-height: 38px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-back:active {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+    }
+
+    .cotizador-header h1 {
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .cotizador-header .header-hours {
+      display: inline-block;
+      margin-top: 5px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(217, 164, 65, 0.12);
+      border: 1px solid rgba(217, 164, 65, 0.6);
+      padding: 3px 12px;
+      border-radius: 20px;
+    }
+
+    .cotizador-header p.subtext {
+      font-size: 12.5px;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+
+    .cotizador-container {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin: 16px 0 10px;
+    }
+
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+
+    .service-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .service-info h3 {
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .service-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .price-tag {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .discount-badge {
+      display: inline-block;
+      background-color: #eaf4ef;
+      color: var(--primary);
+      border: 1px solid #cce5d9;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-top: 6px;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .btn-step {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: #f4f4f2;
+      color: var(--text-main);
+      font-size: 22px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-step:active {
+      transform: scale(0.95);
+      background-color: #e5e5df;
+    }
+
+    .qty-display {
+      font-size: 18px;
+      font-weight: 700;
+      min-width: 44px;
+      text-align: center;
+      color: var(--primary-dark);
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .radio-option.selected {
+      border-color: var(--primary);
+      background-color: #f1f7f4;
+    }
+
+    .radio-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #b4b4ad;
+    }
+
+    .radio-option.selected .radio-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      cursor: pointer;
+    }
+
+    .checkbox-custom {
+      width: 26px;
+      height: 26px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .checkbox-custom.checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .badge-orientative {
+      font-size: 11px;
+      font-weight: 600;
+      color: #a86c00;
+      background: #fff8e8;
+      border: 1px solid #fae2af;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .summary-card {
+      background: #ffffff;
+      border: 1.5px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: 20px;
+      box-shadow: 0 4px 14px rgba(23, 77, 57, 0.08);
+    }
+
+    .summary-card h2 {
+      font-size: 16px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 8px;
+    }
+
+    .summary-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .summary-empty {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .cotizador-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 24px 16px 12px;
+    }
+
+    /* Barra flotante inferior */
+    .bottom-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+      z-index: 100;
+    }
+
+    .bottom-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .total-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .total-amount {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-cot-whatsapp {
+      flex: 1;
+      min-height: 50px;
+      background-color: var(--gold);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(217, 164, 65, 0.35);
+    }
+
+    .btn-cot-whatsapp:active {
+      background-color: var(--gold-hover);
+    }
+
+    .btn-clear {
+      min-height: 50px;
+      padding: 0 16px;
+      background-color: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-clear:active {
+      background: #f4f4f2;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       PANTALLA 1: TARJETA DIGITAL (INICIO)
+       ======================================================== -->
+  <div id="view-card">
+    <div class="digital-card">
+      
+      <!-- Encabezado verde -->
+      <header class="card-header">
+        <h1>Centro de Servicios Múltiples Edison</h1>
+        <p class="tagline">Copias, impresiones, escaneo y más — envía por WhatsApp y recoge listo</p>
+        <div class="hours-pill">Abierto de 7:00 AM a 9:00 PM</div>
+      </header>
+
+      <div class="card-content">
+
+        <!-- Dirección -->
+        <div class="address-row">
+          <div class="address-info">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+            </svg>
+            <span>Calle Altagracia #21, La Victoria, Santo Domingo Norte</span>
+          </div>
+          <a class="btn-maps" 
+             href="https://www.google.com/maps/search/?api=1&query=Calle+Altagracia+21%2C+La+Victoria%2C+Santo+Domingo+Norte" 
+             target="_blank" 
+             rel="noopener noreferrer">
+            Cómo llegar
+          </a>
+        </div>
+
+        <!-- Lista corta de servicios -->
+        <div class="services-summary">
+          <div class="services-summary-title">Servicios y Precios Rápidos</div>
+          <div class="chip-cloud">
+            <span class="chip">Copias B/N <strong>RD$4–10</strong></span>
+            <span class="chip">Color <strong>RD$27</strong></span>
+            <span class="chip">Copia cédula <strong>RD$20</strong></span>
+            <span class="chip">Escaneo <strong>RD$15</strong></span>
+            <span class="chip">Expediente PDF <strong>RD$150</strong></span>
+            <span class="chip">Currículum <strong>desde RD$300</strong></span>
+            <span class="chip">Tesis <strong>por páginas</strong></span>
+          </div>
+        </div>
+
+        <!-- Botón principal dorado grande (Cotizador) -->
+        <button type="button" class="btn-action btn-main-gold" onclick="goToCotizador()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 2h-14c-1.104 0-2 .896-2 2v16c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2v-16c0-1.104-.896-2-2-2zm-12 4h10v2h-10v-2zm2 5h2v2h-2v-2zm0 4h2v2h-2v-2zm4-4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-4h2v6h-2v-6z"/>
+          </svg>
+          Cotizar precios
+        </button>
+
+        <!-- Botones secundarios -->
+        <div class="grid-duo">
+          <button type="button" class="btn-action btn-outline" onclick="sendCardWhatsApp()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            Pedir por WhatsApp
+          </button>
+
+          <a class="btn-action btn-outline" href="tel:+18296501198">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 22.621l-3.521-6.724 3.197-1.708c-.821-3.288-3.308-5.775-6.596-6.596l-1.708 3.197-6.724-3.521 3.559-6.669c1.939-.499 4.288-.6 6.893.4 4.33 1.661 7.769 5.1 9.43 9.43.999 2.605.899 4.954.4 6.893l-4.93 5.298z"/>
+            </svg>
+            Llamar
+          </a>
+        </div>
+
+        <!-- Cierre -->
+        <p class="card-footer-note">
+          Guarda esta tarjeta en tu pantalla de inicio y ten tu centro de servicios siempre a mano.
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       PANTALLA 2: COTIZADOR
+       ======================================================== -->
+  <div id="view-cotizador">
+    
+    <!-- Encabezado con Volver y Horario visible -->
+    <header class="cotizador-header">
+      <button type="button" class="btn-back" onclick="goToCard()" aria-label="Volver">← Volver</button>
+      <span class="header-badge">Cotizador en Línea</span>
+      <h1>Centro de Servicios Múltiples Edison</h1>
+      <div><span class="header-hours">Abierto de 7:00 AM a 9:00 PM</span></div>
+      <p class="subtext">Precios instantáneos y pedidos directos por WhatsApp</p>
+    </header>
+
+    <main class="cotizador-container">
+      <!-- Datos del cliente (agregado por Muse, 7-nov-2026) -->
+      <div style="background:#fff; border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:14px;">
+        <label for="clientName" style="display:block; font-weight:700; font-size:14px; margin-bottom:6px;">Tu nombre (opcional)</label>
+        <input id="clientName" type="text" placeholder="Ej.: María Pérez" autocomplete="name" style="width:100%; padding:12px; border:1.5px solid var(--border); border-radius:10px; font-size:15px; box-sizing:border-box;">
+      </div>
+
+      <p class="section-title">Copias e Impresiones</p>
+
+      <!-- 1. Copia B/N -->
+      <div class="service-card">
+        <div class="service-head">
+          <div class="service-info">
+            <h3>Copia B/N (carta)</h3>
+            <p>RD$10 (descuentos desde 20 págs.)</p>
+            <div id="bnDiscountBadge" class="discount-badge" style="display: none;">Precio por volumen aplicado</div>
+          </div>
+          <div class="price-tag" id="priceTagBN">RD$10 c/u</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="btn-step" onclick="changeQty('bn', -1)" aria-label="Disminuir">−</button>
+          <span class="qty-display" id="qty-bn">0</span>
+          <button type="button" class="btn-step" onclick="changeQty('bn', 1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+
+      <!-- 2. Copia Color -->
+      <div class="service-card">
+        <div class="service-head">
+          <div class="service-info">
+            <h3>Copia a Color (carta)</h3>
+            <p>Impresión nítida a full color</p>
+          </div>
+          <div class="price-tag">RD$27 c/u</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="btn-step" onclick="changeQty('color', -1)" aria-label="Disminuir">−</button>
+          <span class="qty-display" id="qty-color">0</span>
+          <button type="button" class="btn-step" onclick="changeQty('color', 1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+
+      <!-- 3. Copia de Cédula -->
+      <div class="service-card">
+        <div class="service-head">
+          <div class="service-info">
+            <h3>Copia de Cédula</h3>
+            <p>Ambos lados en una sola página</p>
+          </div>
+          <div class="price-tag">RD$20 c/u</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="btn-step" onclick="changeQty('cedula', -1)" aria-label="Disminuir">−</button>
+          <span class="qty-display" id="qty-cedula">0</span>
+          <button type="button" class="btn-step" onclick="changeQty('cedula', 1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+
+      <p class="section-title">Digitalización y Documentos</p>
+
+      <!-- 4. Escaneo -->
+      <div class="service-card">
+        <div class="service-head">
+          <div class="service-info">
+            <h3>Escaneo de Páginas</h3>
+            <p>Documentos o imágenes sueltas</p>
+          </div>
+          <div class="price-tag">RD$15 c/u</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="btn-step" onclick="changeQty('scan', -1)" aria-label="Disminuir">−</button>
+          <span class="qty-display" id="qty-scan">0</span>
+          <button type="button" class="btn-step" onclick="changeQty('scan', 1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+
+      <!-- 5. Expediente a PDF -->
+      <div class="service-card">
+        <div class="service-head">
+          <div class="service-info">
+            <h3>Expediente completo a PDF</h3>
+            <p>Digitalización integral organizada</p>
+          </div>
+          <div class="price-tag">RD$150 c/u</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="btn-step" onclick="changeQty('expediente', -1)" aria-label="Disminuir">−</button>
+          <span class="qty-display" id="qty-expediente">0</span>
+          <button type="button" class="btn-step" onclick="changeQty('expediente', 1)" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+
+      <p class="section-title">Servicios Profesionales</p>
+
+      <!-- 6. Currículum -->
+      <div class="service-card">
+        <div class="service-head">
+          <div class="service-info">
+            <h3>Currículum Vitae (CV)</h3>
+            <p>Elige la modalidad que necesitas</p>
+          </div>
+        </div>
+        <div class="radio-group">
+          <div class="radio-option selected" id="opt-cv-none" onclick="selectCV('none')">
+            <div class="radio-left">
+              <span class="radio-circle"></span>
+              <span>No requiero</span>
+            </div>
+            <span style="font-size: 13px; color: var(--text-muted);">-</span>
+          </div>
+          <div class="radio-option" id="opt-cv-design" onclick="selectCV('design')">
+            <div class="radio-left">
+              <span class="radio-circle"></span>
+              <span>Solo Diseño</span>
+            </div>
+            <span class="price-tag">RD$300</span>
+          </div>
+          <div class="radio-option" id="opt-cv-full" onclick="selectCV('full')">
+            <div class="radio-left">
+              <span class="radio-circle"></span>
+              <span>Paquete Completo (Diseño + Impresiones)</span>
+            </div>
+            <span class="price-tag">RD$500</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Trabajos de Tesis -->
+      <div class="service-card">
+        <div class="toggle-row" onclick="toggleTesis()">
+          <div class="service-info" style="padding-right: 10px;">
+            <h3>Trabajos de Tesis</h3>
+            <span class="badge-orientative">Precio orientativo, se confirma en el local</span>
+            <p style="margin-top: 4px;">Formato, encuadernación e impresión general</p>
+          </div>
+          <div style="display:flex; align-items:center; gap: 10px;">
+            <span class="price-tag">Desde RD$1,500</span>
+            <div class="checkbox-custom" id="chk-tesis">✓</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen detallado -->
+      <div class="summary-card">
+        <h2>Detalle de la cotización</h2>
+        <ul class="summary-list" id="summaryItems">
+          <li class="summary-empty">Aún no has agregado ningún servicio.</li>
+        </ul>
+      </div>
+
+      <!-- Detalles del pedido (agregado por Muse, 7-nov-2026) -->
+      <div style="background:#fff; border:1px solid var(--border); border-radius:14px; padding:14px; margin-top:14px;">
+        <label for="clientNote" style="display:block; font-weight:700; font-size:14px; margin-bottom:6px;">Cuéntanos los detalles de tu pedido (opcional)</label>
+        <textarea id="clientNote" rows="3" placeholder="Ej.: lo necesito hoy antes de las 5, papel grueso, engrapar todo junto…" style="width:100%; padding:12px; border:1.5px solid var(--border); border-radius:10px; font-size:15px; box-sizing:border-box; resize:vertical;"></textarea>
+      </div>
+
+      <footer class="cotizador-footer">
+        Centro de Servicios Múltiples Edison — Calle Altagracia #21, La Victoria, Santo Domingo Norte.
+      </footer>
+    </main>
+
+    <!-- Barra fija inferior con total y WhatsApp -->
+    <div class="bottom-bar" id="bottom-bar">
+      <div class="bottom-inner">
+        <div class="total-row">
+          <span class="total-label">Total estimado</span>
+          <span class="total-amount" id="grandTotal">RD$0</span>
+        </div>
+        <div class="action-buttons">
+          <button type="button" class="btn-clear" onclick="resetForm()">Limpiar</button>
+          <button type="button" class="btn-cot-whatsapp" onclick="sendCotizadorWhatsApp()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            Pedir por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. NAVEGACIÓN ENTRE PANTALLAS
+    // ==========================================
+    function goToCotizador() {
+      document.getElementById('view-card').style.display = 'none';
+      document.getElementById('view-cotizador').style.display = 'block';
+      document.getElementById('bottom-bar').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    function goToCard() {
+      document.getElementById('view-cotizador').style.display = 'none';
+      document.getElementById('bottom-bar').style.display = 'none';
+      document.getElementById('view-card').style.display = 'flex';
+      window.scrollTo(0, 0);
+    }
+
+    // ==========================================
+    // 2. WHATSAPP DESDE LA TARJETA
+    // ==========================================
+    function sendCardWhatsApp() {
+      const mensaje = 'Hola, quiero un servicio del Centro de Servicios Múltiples Edison';
+      const url = 'https://wa.me/18296501198?text=' + encodeURIComponent(mensaje);
+      window.open(url, '_blank');
+    }
+
+    // ==========================================
+    // 3. ESTADO Y LÓGICA DEL COTIZADOR
+    // ==========================================
+    const state = {
+      bn: 0,
+      color: 0,
+      cedula: 0,
+      scan: 0,
+      expediente: 0,
+      cv: 'none',
+      tesis: false
+    };
+
+    function getUnitPriceBN(qty) {
+      if (qty >= 200) return 4;
+      if (qty >= 100) return 5;
+      if (qty >= 50) return 6;
+      if (qty >= 20) return 8;
+      return 10;
+    }
+
+    function changeQty(service, delta) {
+      state[service] = Math.max(0, state[service] + delta);
+      document.getElementById('qty-' + service).textContent = state[service];
+      updateApp();
+    }
+
+    function selectCV(type) {
+      state.cv = type;
+      document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
+      document.getElementById('opt-cv-' + type).classList.add('selected');
+      updateApp();
+    }
+
+    function toggleTesis() {
+      state.tesis = !state.tesis;
+      const chk = document.getElementById('chk-tesis');
+      if (state.tesis) {
+        chk.classList.add('checked');
+      } else {
+        chk.classList.remove('checked');
+      }
+      updateApp();
+    }
+
+    function resetForm() {
+      state.bn = 0;
+      state.color = 0;
+      state.cedula = 0;
+      state.scan = 0;
+      state.expediente = 0;
+      state.cv = 'none';
+      state.tesis = false;
+
+      ['bn', 'color', 'cedula', 'scan', 'expediente'].forEach(id => {
+        document.getElementById('qty-' + id).textContent = '0';
+      });
+
+      document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
+      document.getElementById('opt-cv-none').classList.add('selected');
+      document.getElementById('chk-tesis').classList.remove('checked');
+      document.getElementById('clientName').value = '';
+      document.getElementById('clientNote').value = '';
+
+      updateApp();
+    }
+
+    function updateApp() {
+      let total = 0;
+      const lines = [];
+
+      // 1. Copia B/N
+      const bnBadge = document.getElementById('bnDiscountBadge');
+      const bnTag = document.getElementById('priceTagBN');
+      if (state.bn > 0) {
+        const unitBN = getUnitPriceBN(state.bn);
+        const subtotalBN = state.bn * unitBN;
+        total += subtotalBN;
+        bnTag.textContent = `RD$${unitBN} c/u`;
+
+        if (unitBN < 10) {
+          bnBadge.style.display = 'inline-block';
+          lines.push({
+            name: `Copia B/N (${state.bn} págs. × RD$${unitBN})`,
+            note: 'descuento por volumen',
+            subtotal: subtotalBN
+          });
+        } else {
+          bnBadge.style.display = 'none';
+          lines.push({
+            name: `Copia B/N (${state.bn} págs. × RD$10)`,
+            subtotal: subtotalBN
+          });
+        }
+      } else {
+        bnBadge.style.display = 'none';
+        bnTag.textContent = 'RD$10 c/u';
+      }
+
+      // 2. Copia Color
+      if (state.color > 0) {
+        const sub = state.color * 27;
+        total += sub;
+        lines.push({ name: `Copia Color (${state.color} págs. × RD$27)`, subtotal: sub });
+      }
+
+      // 3. Copia Cédula
+      if (state.cedula > 0) {
+        const sub = state.cedula * 20;
+        total += sub;
+        lines.push({ name: `Copia Cédula (${state.cedula} × RD$20)`, subtotal: sub });
+      }
+
+      // 4. Escaneo
+      if (state.scan > 0) {
+        const sub = state.scan * 15;
+        total += sub;
+        lines.push({ name: `Escaneo (${state.scan} págs. × RD$15)`, subtotal: sub });
+      }
+
+      // 5. Expediente a PDF
+      if (state.expediente > 0) {
+        const sub = state.expediente * 150;
+        total += sub;
+        lines.push({ name: `Expediente PDF (${state.expediente} × RD$150)`, subtotal: sub });
+      }
+
+      // 6. Currículum
+      if (state.cv === 'design') {
+        total += 300;
+        lines.push({ name: 'Currículum (Solo Diseño)', subtotal: 300 });
+      } else if (state.cv === 'full') {
+        total += 500;
+        lines.push({ name: 'Currículum (Diseño + Impresiones)', subtotal: 500 });
+      }
+
+      // 7. Tesis
+      if (state.tesis) {
+        total += 1500;
+        lines.push({
+          name: 'Trabajos de Tesis',
+          note: 'precio orientativo, se confirma en el local',
+          subtotal: 1500,
+          prefix: 'Desde '
+        });
+      }
+
+      // Render lista resumen
+      const summaryList = document.getElementById('summaryItems');
+      summaryList.innerHTML = '';
+
+      if (lines.length === 0) {
+        summaryList.innerHTML = '<li class="summary-empty">Aún no has agregado ningún servicio.</li>';
+      } else {
+        lines.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'summary-item';
+          const prefix = item.prefix || '';
+          const noteHtml = item.note ? `<div style="font-size: 11px; color: var(--primary); font-weight: 600;">(${item.note})</div>` : '';
+          li.innerHTML = `
+            <div>
+              <span>${item.name}</span>
+              ${noteHtml}
+            </div>
+            <strong>${prefix}RD$${item.subtotal.toLocaleString('es-DO')}</strong>
+          `;
+          summaryList.appendChild(li);
+        });
+      }
+
+      // Render Total
+      const prefixTotal = state.tesis ? 'Desde RD$' : 'RD$';
+      document.getElementById('grandTotal').textContent = `${prefixTotal}${total.toLocaleString('es-DO')}`;
+    }
+
+    // ==========================================
+    // 4. WHATSAPP CON COTIZACIÓN COMPLETA
+    // ==========================================
+    function sendCotizadorWhatsApp() {
+      let total = 0;
+      const itemsText = [];
+      const extrasText = [];
+
+      // Renglones principales
+      if (state.bn > 0) {
+        const unit = getUnitPriceBN(state.bn);
+        const sub = state.bn * unit;
+        total += sub;
+        const note = unit < 10 ? ' *(descuento por volumen)*' : '';
+        itemsText.push(`• Copia B/N (carta): ${state.bn} págs. × RD$${unit} = RD$${sub.toLocaleString('es-DO')}${note}`);
+      }
+
+      if (state.color > 0) {
+        const sub = state.color * 27;
+        total += sub;
+        itemsText.push(`• Copia a Color (carta): ${state.color} págs. × RD$27 = RD$${sub.toLocaleString('es-DO')}`);
+      }
+
+      if (state.cedula > 0) {
+        const sub = state.cedula * 20;
+        total += sub;
+        itemsText.push(`• Copia de Cédula: ${state.cedula} unidad(es) × RD$20 = RD$${sub.toLocaleString('es-DO')}`);
+      }
+
+      if (state.scan > 0) {
+        const sub = state.scan * 15;
+        total += sub;
+        itemsText.push(`• Escaneo de Páginas: ${state.scan} págs. × RD$15 = RD$${sub.toLocaleString('es-DO')}`);
+      }
+
+      if (state.expediente > 0) {
+        const sub = state.expediente * 150;
+        total += sub;
+        itemsText.push(`• Expediente a PDF: ${state.expediente} doc(s) × RD$150 = RD$${sub.toLocaleString('es-DO')}`);
+      }
+
+      // Extras y servicios especiales
+      if (state.cv === 'design') {
+        total += 300;
+        extrasText.push('• Currículum Vitae: Solo Diseño = RD$300');
+      } else if (state.cv === 'full') {
+        total += 500;
+        extrasText.push('• Currículum Vitae: Paquete Completo (Diseño + Impresiones) = RD$500');
+      }
+
+      if (state.tesis) {
+        total += 1500;
+        extrasText.push('• Trabajos de Tesis: Desde RD$1,500 *(precio orientativo, se confirma en el local)*');
+      }
+
+      if (itemsText.length === 0 && extrasText.length === 0) {
+        alert('Por favor, selecciona al menos un servicio para cotizar antes de enviar.');
+        return;
+      }
+
+      const totalFormatted = (state.tesis ? 'Desde RD$' : 'RD$') + total.toLocaleString('es-DO');
+
+      // Fecha y hora actual formateada de forma segura
+      const now = new Date();
+      let fechaHora = '';
+      try {
+        fechaHora = now.toLocaleString('es-DO', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      } catch (e) {
+        fechaHora = now.toLocaleString();
+      }
+
+      // Estructura completa de la cotización
+      let mensaje = `📋 *COTIZACIÓN FORMAL DE SERVICIOS*\n`;
+      mensaje += `🏢 *Negocio:* Centro de Servicios Múltiples Edison\n`;
+      mensaje += `📅 *Fecha y hora:* ${fechaHora}\n`;
+      mensaje += `⚡ *Urgencia:* Estándar (preparar para recoger listo)\n`;
+      mensaje += `📍 *Entrega:* Recoger en local (Calle Altagracia #21, La Victoria, SDN)\n\n`;
+
+      const nombreCliente = (document.getElementById('clientName').value || '').trim();
+      if (nombreCliente) {
+        mensaje += `👤 *Cliente:* ${nombreCliente}\n\n`;
+      }
+
+      if (itemsText.length > 0) {
+        mensaje += `*RENGLONES Y DETALLE:*\n`;
+        mensaje += itemsText.join('\n') + `\n\n`;
+      }
+
+      if (extrasText.length > 0) {
+        mensaje += `*SERVICIOS ESPECIALES Y EXTRAS:*\n`;
+        mensaje += extrasText.join('\n') + `\n\n`;
+      }
+
+      mensaje += `💰 *TOTAL ESTIMADO: ${totalFormatted}*\n\n`;
+
+      const notaCliente = (document.getElementById('clientNote').value || '').trim();
+      if (notaCliente) {
+        mensaje += `🗒️ *Detalle del cliente:* ${notaCliente}\n\n`;
+      }
+
+      mensaje += `📝 *Nota general:* Cotización generada desde la web. Los precios de tesis y formatos especiales se confirman en el local al entregar o revisar archivos. Abierto de 7:00 AM a 9:00 PM.`;
+
+      const url = 'https://wa.me/18296501198?text=' + encodeURIComponent(mensaje);
+      window.open(url, '_blank');
+    }
+
+    // Inicializar estado del cotizador
+    updateApp();
+  </script>
+</body>
+</html>
