@@ -700,6 +700,7 @@
             <span class="chip">Encuadernación <strong>desde RD$100</strong></span>
             <span class="chip">Diseño y logos <strong>a cotizar</strong></span>
             <span class="chip">Trámites en línea <strong>asistidos</strong></span>
+            <span class="chip">Paquetes y clubes <strong>desde RD$80</strong></span>
           </div>
         </div>
 
@@ -731,6 +732,9 @@
         <!-- Cierre -->
         <p class="card-footer-note">
           Guarda esta tarjeta en tu pantalla de inicio y ten tu centro de servicios siempre a mano.
+        </p>
+        <p class="card-footer-note" style="margin-top: 2px;">
+          Precios sujetos a cambios sin previo aviso.
         </p>
 
       </div>
@@ -909,6 +913,10 @@
       <p class="section-title">Diseño Gráfico, Fotografía y Publicidad</p>
       <div id="extra-gra"></div>
 
+      <!-- Fase 2: paquetes y clubes (generado por JS) -->
+      <p class="section-title">Paquetes y Clubes</p>
+      <div id="extra-paquetes"></div>
+
       <!-- Resumen detallado -->
       <div class="summary-card">
         <h2>Detalle de la cotización</h2>
@@ -924,7 +932,8 @@
       </div>
 
       <footer class="cotizador-footer">
-        Centro de Servicios Múltiples Edison — Calle Altagracia #21, La Victoria, Santo Domingo Norte.
+        Centro de Servicios Múltiples Edison — Calle Altagracia #21, La Victoria, Santo Domingo Norte.<br>
+        Precios sujetos a cambios sin previo aviso.
       </footer>
     </main>
 
@@ -987,7 +996,8 @@
       expediente: 0,
       cv: 'none',
       tesis: false,
-      extra: {}
+      extra: {},
+      paquetes: {}
     };
 
     // ==========================================
@@ -1058,6 +1068,56 @@
       updateApp();
     }
 
+    // ==========================================
+    // 3C. FASE 2 — PAQUETES Y CLUBES (selección única por tarjeta)
+    // ==========================================
+    const PAQUETES = [
+      { id: 'tesis-plus', name: 'Paquete Tesis Plus', desc: '60 impresiones B/N (o 30 a color) + carátula en cartulina satinada + encuadernado térmico + corrección ortográfica básica + copia digital (PDF)', price: 1500 },
+      { id: 'cv-pro', name: 'Paquete CV Pro', desc: '4 CV impresos + corrección de redacción y ortografía + versión digital en PDF', price: 350 },
+      { id: 'boda', name: 'Paquete Boda o Evento', desc: '100 invitaciones diseñadas e impresas', price: 2500 },
+      { id: 'foto-pack4', name: 'Paquete Fotos 2×2 (4 fotos, solo impresión)', desc: 'Impresión de tu foto ya tomada en papel fotográfico', price: 100 },
+      { id: 'foto-pack8', name: 'Paquete Fotos 2×2 (8 fotos, solo impresión)', desc: 'Impresión de tu foto ya tomada en papel fotográfico', price: 200 },
+      { id: 'carta-escolar', name: 'Paquete Carta Escolar', desc: '1 proyecto escolar impreso (4 págs.) + portada a color + encuadernación sencilla', price: 80 },
+      { id: 'tramite-expres', name: 'Paquete Trámite Exprés', desc: '1 documento digital generado + 2 copias impresas + envío por WhatsApp y correo', price: 200 },
+      { id: 'contable', name: 'Paquete Contable PyME (mensual)', desc: 'Hasta 200 impresiones B/N al mes o 100 a color para tu negocio', price: 1000 },
+      { id: 'club-educativo', name: 'Club Educativo (anual)', desc: 'Zona de estudio + Wi-Fi + útiles + desarrollo de un proyecto por estudiante', price: 5000 },
+      { id: 'club-supremo', name: 'Copia Perfectalujo — Club Supremo (anual)', desc: '50 páginas a color al mes (600 al año)', price: 9500 },
+      { id: 'club-premium', name: 'Copia Perfectalujo — Club Premium (anual)', desc: '30 páginas a color al mes (360 al año)', price: 7500 },
+      { id: 'club-economico', name: 'Copia Perfectalujo — Club Económico (anual)', desc: '20 páginas a color al mes (240 al año)', price: 5000 }
+    ];
+
+    function renderPaquetes() {
+      const cont = document.getElementById('extra-paquetes');
+      if (!cont) return;
+      PAQUETES.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'service-card';
+        card.innerHTML = `
+          <div class="toggle-row" onclick="togglePaquete('${p.id}')">
+            <div class="service-info" style="padding-right: 10px;">
+              <h3>${p.name}</h3>
+              <p style="margin-top: 4px;">${p.desc}</p>
+            </div>
+            <div style="display:flex; align-items:center; gap: 10px;">
+              <span class="price-tag">RD$${p.price.toLocaleString('es-DO')}</span>
+              <div class="checkbox-custom" id="chk-paq-${p.id}">✓</div>
+            </div>
+          </div>`;
+        cont.appendChild(card);
+      });
+    }
+
+    function togglePaquete(id) {
+      state.paquetes[id] = !state.paquetes[id];
+      const chk = document.getElementById('chk-paq-' + id);
+      if (state.paquetes[id]) {
+        chk.classList.add('checked');
+      } else {
+        chk.classList.remove('checked');
+      }
+      updateApp();
+    }
+
     function getUnitPriceBN(qty) {
       if (qty >= 200) return 4;
       if (qty >= 100) return 5;
@@ -1102,6 +1162,11 @@
       CATALOGO.forEach(s => {
         const el = document.getElementById('qty-x-' + s.id);
         if (el) el.textContent = '0';
+      });
+      state.paquetes = {};
+      PAQUETES.forEach(p => {
+        const chk = document.getElementById('chk-paq-' + p.id);
+        if (chk) chk.classList.remove('checked');
       });
 
       ['bn', 'color', 'cedula', 'scan', 'expediente'].forEach(id => {
@@ -1214,6 +1279,14 @@
         }
       });
 
+      // 9. Fase 2: paquetes y clubes
+      PAQUETES.forEach(p => {
+        if (state.paquetes[p.id]) {
+          total += p.price;
+          lines.push({ name: p.name, subtotal: p.price });
+        }
+      });
+
       // Render lista resumen
       const summaryList = document.getElementById('summaryItems');
       summaryList.innerHTML = '';
@@ -1310,6 +1383,14 @@
         extrasText.push('• Trabajos de Tesis: Desde RD$1,500 *(precio orientativo, se confirma en el local)*');
       }
 
+      // Fase 2: paquetes y clubes
+      PAQUETES.forEach(p => {
+        if (state.paquetes[p.id]) {
+          total += p.price;
+          extrasText.push(`• ${p.name} = RD$${p.price.toLocaleString('es-DO')}`);
+        }
+      });
+
       if (itemsText.length === 0 && extrasText.length === 0) {
         alert('Por favor, selecciona al menos un servicio para cotizar antes de enviar.');
         return;
@@ -1362,7 +1443,7 @@
         mensaje += `🗒️ *Detalle del cliente:* ${notaCliente}\n\n`;
       }
 
-      mensaje += `📝 *Nota general:* Cotización generada desde la web. Los precios de tesis y formatos especiales se confirman en el local al entregar o revisar archivos. Abierto de 7:00 AM a 9:00 PM.`;
+      mensaje += `📝 *Nota general:* Cotización generada desde la web. Los precios de tesis y formatos especiales se confirman en el local al entregar o revisar archivos. Precios sujetos a cambios sin previo aviso. Abierto de 7:00 AM a 9:00 PM.`;
 
       const url = 'https://wa.me/18296501198?text=' + encodeURIComponent(mensaje);
       window.open(url, '_blank');
@@ -1370,6 +1451,7 @@
 
     // Inicializar estado del cotizador
     renderCatalogo();
+    renderPaquetes();
     updateApp();
   </script>
 </body>
