@@ -695,6 +695,11 @@
             <span class="chip">Expediente PDF <strong>RD$150</strong></span>
             <span class="chip">Currículum <strong>desde RD$300</strong></span>
             <span class="chip">Tesis <strong>por páginas</strong></span>
+            <span class="chip">Fotos 2×2 <strong>desde RD$200</strong></span>
+            <span class="chip">Plastificado <strong>desde RD$50</strong></span>
+            <span class="chip">Encuadernación <strong>desde RD$100</strong></span>
+            <span class="chip">Diseño y logos <strong>a cotizar</strong></span>
+            <span class="chip">Trámites en línea <strong>asistidos</strong></span>
           </div>
         </div>
 
@@ -788,6 +793,9 @@
         </div>
       </div>
 
+      <!-- Catálogo ampliado: copias en tamaño legal (generado por JS) -->
+      <div id="extra-copias"></div>
+
       <!-- 3. Copia de Cédula -->
       <div class="service-card">
         <div class="service-head">
@@ -838,6 +846,9 @@
         </div>
       </div>
 
+      <!-- Catálogo ampliado: documentos (generado por JS) -->
+      <div id="extra-docs"></div>
+
       <p class="section-title">Servicios Profesionales</p>
 
       <!-- 6. Currículum -->
@@ -887,6 +898,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Catálogo ampliado Plan Maestro v2.0 (generado por JS) -->
+      <p class="section-title">Documentos y Trámites</p>
+      <div id="extra-tramites"></div>
+
+      <p class="section-title">Educación y Academia</p>
+      <div id="extra-edu"></div>
+
+      <p class="section-title">Diseño Gráfico, Fotografía y Publicidad</p>
+      <div id="extra-gra"></div>
 
       <!-- Resumen detallado -->
       <div class="summary-card">
@@ -965,8 +986,77 @@
       scan: 0,
       expediente: 0,
       cv: 'none',
-      tesis: false
+      tesis: false,
+      extra: {}
     };
+
+    // ==========================================
+    // 3B. CATÁLOGO AMPLIADO — Plan Maestro v2.0 (33 servicios)
+    // Los 7 servicios originales están arriba; estos completan el tarifario.
+    // "desde: true" = precio base, se confirma en el local.
+    // ==========================================
+    const CATALOGO = [
+      // Copias e Impresiones (tamaños adicionales)
+      { id: 'bnlegal', target: 'extra-copias', name: 'Copia / Impresión B/N (oficio/legal)', desc: 'Documentos tamaño legal completos, sin truncar', price: 20, unit: 'pág.' },
+      { id: 'colorlegal', target: 'extra-copias', name: 'Copia / Impresión Color (oficio/legal)', desc: 'Full color en tamaño legal', price: 40, unit: 'pág.' },
+      // Digitalización y Documentos
+      { id: 'cvprint', target: 'extra-docs', name: 'Currículum: solo impresión', desc: 'Tú traes tu CV listo (PDF, Word o foto)', price: 25, unit: 'doc.' },
+      { id: 'conversion', target: 'extra-docs', name: 'Conversión / edición de archivos', desc: 'Word ⇄ PDF, unir, comprimir y corregir formato', price: 100, unit: 'archivo' },
+      // Documentos y Trámites
+      { id: 'cartas', target: 'extra-tramites', name: 'Redacción de cartas y solicitudes', desc: 'Cartas formales, de recomendación y solicitudes laborales', price: 250, unit: 'doc.' },
+      { id: 'contratos', target: 'extra-tramites', name: 'Contratos de alquiler y acuerdos', desc: 'Digitación, corrección y formato de contratos', price: 400, unit: 'doc.', desde: true },
+      { id: 'formularios', target: 'extra-tramites', name: 'Llenado de formularios oficiales', desc: 'Asistencia en formularios físicos y digitales', price: 300, unit: 'formulario' },
+      // Educación y Academia
+      { id: 'digitacion', target: 'extra-edu', name: 'Digitación de trabajos escolares', desc: 'Tareas y trabajos digitados con buen formato', price: 50, unit: 'pág.', desde: true },
+      { id: 'formato', target: 'extra-edu', name: 'Formato de tesis / monográficos (por página)', desc: 'Normas APA: márgenes, citas y bibliografía', price: 20, unit: 'pág.', desde: true },
+      { id: 'portadas', target: 'extra-edu', name: 'Portadas e índices automáticos', desc: 'Portada profesional para tus trabajos', price: 150, unit: 'trabajo', desde: true },
+      { id: 'ppt', target: 'extra-edu', name: 'Presentaciones PowerPoint', desc: 'Diseño profesional por diapositiva', price: 40, unit: 'diapositiva', desde: true },
+      { id: 'encuadernacion', target: 'extra-edu', name: 'Encuadernación en espiral', desc: 'Para monográficos, guías y folletos', price: 100, unit: 'unidad', desde: true },
+      { id: 'plastificado', target: 'extra-edu', name: 'Plastificado (carnet / cédula)', desc: 'Laminado térmico protector', price: 50, unit: 'unidad', desde: true },
+      { id: 'plastificado2', target: 'extra-edu', name: 'Plastificado carta / oficio', desc: 'Laminado térmico tamaño completo', price: 100, unit: 'unidad', desde: true },
+      { id: 'tutorias', target: 'extra-edu', name: 'Tutorías de nivelación / informática', desc: 'Acompañamiento personalizado por hora', price: 350, unit: 'hora', desde: true },
+      // Diseño Gráfico, Fotografía y Publicidad
+      { id: 'fotos2x2', target: 'extra-gra', name: 'Fotos 2×2 para documentos', desc: 'Captura + retoque + 4 fotos (carnet, pasaporte)', price: 200, unit: 'juego', desde: true },
+      { id: 'fotosextra', target: 'extra-gra', name: 'Fotos 2×2 adicionales', desc: '4 fotos extra del mismo retrato', price: 100, unit: 'juego' },
+      { id: 'foto4x6', target: 'extra-gra', name: 'Impresión de foto 4×6', desc: 'En papel fotográfico, alta calidad', price: 40, unit: 'foto', desde: true },
+      { id: 'restauracion', target: 'extra-gra', name: 'Restauración de fotos dañadas', desc: 'Recuperamos tus fotos antiguas', price: 250, unit: 'foto', desde: true },
+      { id: 'flyers', target: 'extra-gra', name: 'Diseño de flyers / volantes', desc: 'Diseño digital listo para imprimir', price: 400, unit: 'diseño', desde: true },
+      { id: 'tarjetas', target: 'extra-gra', name: 'Diseño de tarjetas de presentación', desc: 'Diseño profesional para tu negocio', price: 350, unit: 'diseño', desde: true },
+      { id: 'menus', target: 'extra-gra', name: 'Diseño de menú (cafetería / comedor)', desc: 'Por página, listo para imprimir', price: 500, unit: 'página', desde: true },
+      { id: 'logo', target: 'extra-gra', name: 'Logotipo básico para emprendedores', desc: 'Identidad inicial para tu negocio', price: 1200, unit: 'proyecto', desde: true },
+      { id: 'qr', target: 'extra-gra', name: 'Código QR con tu logo', desc: 'Para tu negocio, menú o redes sociales', price: 100, unit: 'unidad', desde: true },
+      { id: 'landing', target: 'extra-gra', name: 'Página web sencilla (landing)', desc: 'Presencia en internet para tu negocio', price: 5000, unit: 'proyecto', desde: true }
+    ];
+
+    function renderCatalogo() {
+      CATALOGO.forEach(s => {
+        const cont = document.getElementById(s.target);
+        if (!cont) return;
+        const card = document.createElement('div');
+        card.className = 'service-card';
+        const tag = s.desde ? `Desde RD$${s.price.toLocaleString('es-DO')}` : `RD$${s.price.toLocaleString('es-DO')} c/u`;
+        card.innerHTML = `
+          <div class="service-head">
+            <div class="service-info">
+              <h3>${s.name}</h3>
+              <p>${s.desc}</p>
+            </div>
+            <div class="price-tag">${tag}</div>
+          </div>
+          <div class="stepper">
+            <button type="button" class="btn-step" onclick="changeExtraQty('${s.id}', -1)" aria-label="Disminuir">−</button>
+            <span class="qty-display" id="qty-x-${s.id}">0</span>
+            <button type="button" class="btn-step" onclick="changeExtraQty('${s.id}', 1)" aria-label="Aumentar">+</button>
+          </div>`;
+        cont.appendChild(card);
+      });
+    }
+
+    function changeExtraQty(id, delta) {
+      state.extra[id] = Math.max(0, (state.extra[id] || 0) + delta);
+      document.getElementById('qty-x-' + id).textContent = state.extra[id];
+      updateApp();
+    }
 
     function getUnitPriceBN(qty) {
       if (qty >= 200) return 4;
@@ -1008,6 +1098,11 @@
       state.expediente = 0;
       state.cv = 'none';
       state.tesis = false;
+      state.extra = {};
+      CATALOGO.forEach(s => {
+        const el = document.getElementById('qty-x-' + s.id);
+        if (el) el.textContent = '0';
+      });
 
       ['bn', 'color', 'cedula', 'scan', 'expediente'].forEach(id => {
         document.getElementById('qty-' + id).textContent = '0';
@@ -1102,6 +1197,23 @@
         });
       }
 
+      // 8. Catálogo ampliado (Plan Maestro v2.0)
+      let anyDesde = state.tesis;
+      CATALOGO.forEach(s => {
+        const q = state.extra[s.id] || 0;
+        if (q > 0) {
+          const sub = q * s.price;
+          total += sub;
+          if (s.desde) anyDesde = true;
+          lines.push({
+            name: `${s.name} (${q} ${s.unit} × RD$${s.price.toLocaleString('es-DO')})`,
+            note: s.desde ? 'precio base, se confirma en el local' : '',
+            subtotal: sub,
+            prefix: s.desde ? 'Desde ' : ''
+          });
+        }
+      });
+
       // Render lista resumen
       const summaryList = document.getElementById('summaryItems');
       summaryList.innerHTML = '';
@@ -1126,7 +1238,7 @@
       }
 
       // Render Total
-      const prefixTotal = state.tesis ? 'Desde RD$' : 'RD$';
+      const prefixTotal = anyDesde ? 'Desde RD$' : 'RD$';
       document.getElementById('grandTotal').textContent = `${prefixTotal}${total.toLocaleString('es-DO')}`;
     }
 
@@ -1171,6 +1283,19 @@
         itemsText.push(`• Expediente a PDF: ${state.expediente} doc(s) × RD$150 = RD$${sub.toLocaleString('es-DO')}`);
       }
 
+      // Catálogo ampliado (Plan Maestro v2.0)
+      let anyDesdeWA = state.tesis;
+      CATALOGO.forEach(s => {
+        const q = state.extra[s.id] || 0;
+        if (q > 0) {
+          const sub = q * s.price;
+          total += sub;
+          if (s.desde) anyDesdeWA = true;
+          const notaDesde = s.desde ? ' *(precio base, se confirma en el local)*' : '';
+          itemsText.push(`• ${s.name}: ${q} ${s.unit} × RD$${s.price.toLocaleString('es-DO')} = RD$${sub.toLocaleString('es-DO')}${notaDesde}`);
+        }
+      });
+
       // Extras y servicios especiales
       if (state.cv === 'design') {
         total += 300;
@@ -1190,7 +1315,7 @@
         return;
       }
 
-      const totalFormatted = (state.tesis ? 'Desde RD$' : 'RD$') + total.toLocaleString('es-DO');
+      const totalFormatted = (anyDesdeWA ? 'Desde RD$' : 'RD$') + total.toLocaleString('es-DO');
 
       // Fecha y hora actual formateada de forma segura
       const now = new Date();
@@ -1244,6 +1369,7 @@
     }
 
     // Inicializar estado del cotizador
+    renderCatalogo();
     updateApp();
   </script>
 </body>
