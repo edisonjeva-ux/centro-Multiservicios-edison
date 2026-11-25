@@ -1,0 +1,10 @@
+{
+  "name": "Centro de Servicios Múltiples Edison",
+  "short_name": "CSM Edison",
+  "description": "Copias, impresiones, escaneo, expedientes PDF y currículums en el Municipio La Victoria.",
+  "lang": "es-DO",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfbfa",
+  "theme_color": "#174d39"
+}

@@ -1,9 +1,9 @@
 # Centro de Servicios Múltiples Edison
 
-Copias, impresiones, escaneo y servicios digitales en La Victoria, Santo Domingo Norte.
+Copias, impresiones, escaneo y servicios digitales en el Municipio La Victoria.
 
 **Horario:** abierto de 7:00 AM a 9:00 PM
-**Dirección:** Calle Principal, La Victoria, Santo Domingo Norte
+**Dirección:** Calle Altagracia #21, Municipio La Victoria
 **WhatsApp:** (829) 650-1198 — envía tus documentos por WhatsApp, cotiza y recoge listo.
 
 ## Servicios
@@ -18,4 +18,4 @@ Copias, impresiones, escaneo y servicios digitales en La Victoria, Santo Domingo
 La tarjeta digital y el cotizador web del Centro viven en este repositorio: el cliente elige sus servicios, escribe los detalles de su pedido y la cotización llega completa por WhatsApp.
 
 ---
-Proyecto de John Edison Vásquez · La Victoria, Santo Domingo Norte
+Proyecto de John Edison Vásquez · Municipio La Victoria
